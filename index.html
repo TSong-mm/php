@@ -1,68 +1,273 @@
-# transong.github.io
+<?php
+
+require("server_info.php");
+session_start();
+
+if (!isset($_SESSION['login_success'])) {
+$_SESSION['message'] = "You must login first";
+header('location: login');
+}
+
+if (isset($_GET['logout'])) {
+session_destroy();
+unset($_SESSION['login_success']);
+header("location: login");
+}
+
+if (isset($_POST['save_info'])) saveInfo();
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<title>TranSong</title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-<!--===============================================================================================-->	
-	<link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
-<!--===============================================================================================-->	
-	<link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
-<!--===============================================================================================-->	
-	<link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="css/util.css">
-	<link rel="stylesheet" type="text/css" href="css/main.css">
-<!--===============================================================================================-->
-</head>
-<body>
-	
-<p>&nbsp;Translater built the Source Codes app as a Free app. This SERVICE is provided by TSong at no cost and is intended for use as is.</p>
-<p dir="ltr">This page is used to inform visitors regarding my policies with the collection, use, and disclosure of Personal Information if anyone decided to use my Service.</p>
-<p dir="ltr">If you choose to use my Service, then you agree to the collection and use of information in relation to this policy. The Personal Information that I collect is used for providing and improving the Service. I will not use or share your information with anyone except as described in this Privacy Policy.</p>
-<p dir="ltr">The terms used in this Privacy Policy have the same meanings as in our Terms and Conditions, which is accessible at Source Codes unless otherwise defined in this Privacy Policy.</p>
-<p dir="ltr">Information Collection and Use</p>
-<p dir="ltr">For a better experience, while using our Service, I may require you to provide us with certain personally identifiable information. The information that I request will be retained on your device and is not collected by me in any way.</p>
-<p dir="ltr">The app does use third party services that may collect information used to identify you.</p>
-<p dir="ltr">Link to privacy policy of third party service providers used by the app</p>
-<p dir="ltr">Google Play Services<br />
-Google Analytics for Firebase<br />
-Log Data</p>
-<p dir="ltr">I want to inform you that whenever you use my Service, in a case of an error in the app I collect data and information (through third party products) on your phone called Log Data. This Log Data may include information such as your device Internet Protocol (“IP”) address, device name, operating system version, the configuration of the app when utilizing my Service, the time and date of your use of the Service, and other statistics.</p>
-<p dir="ltr">Cookies</p>
-<p dir="ltr">Cookies are files with a small amount of data that are commonly used as anonymous unique identifiers. These are sent to your browser from the websites that you visit and are stored on your device's internal memory.</p>
-<p dir="ltr">This Service does not use these “cookies” explicitly. However, the app may use third party code and libraries that use “cookies” to collect information and improve their services. You have the option to either accept or refuse these cookies and know when a cookie is being sent to your device. If you choose to refuse our cookies, you may not be able to use some portions of this Service.</p>
-<p dir="ltr">Service Providers</p>
-<p dir="ltr">I may employ third-party companies and individuals due to the following reasons:</p>
-<p dir="ltr">To facilitate our Service;<br />
-To provide the Service on our behalf;<br />
-To perform Service-related services; or<br />
-To assist us in analyzing how our Service is used.<br />
-I want to inform users of this Service that these third parties have access to your Personal Information. The reason is to perform the tasks assigned to them on our behalf. However, they are obligated not to disclose or use the information for any other purpose.</p>
-<p dir="ltr">Security</p>
-<p dir="ltr">I value your trust in providing us your Personal Information, thus we are striving to use commercially acceptable means of protecting it. But remember that no method of transmission over the internet, or method of electronic storage is 100% secure and reliable, and I cannot guarantee its absolute security.</p>
-<p dir="ltr">Links to Other Sites</p>
-<p dir="ltr">This Service may contain links to other sites. If you click on a third-party link, you will be directed to that site. Note that these external sites are not operated by me. Therefore, I strongly advise you to review the Privacy Policy of these websites. I have no control over and assume no responsibility for the content, privacy policies, or practices of any third-party sites or services.</p>
-<p dir="ltr">Children’s Privacy</p>
-<p dir="ltr">These Services do not address anyone under the age of 13. I do not knowingly collect personally identifiable information from children under 13. In the case I discover that a child under 13 has provided me with personal information, I immediately delete this from our servers. If you are a parent or guardian and you are aware that your child has provided us with personal information, please contact me so that I will be able to do necessary actions.</p>
-<p dir="ltr">Changes to This Privacy Policy</p>
-<p dir="ltr">I may update our Privacy Policy from time to time. Thus, you are advised to review this page periodically for any changes. I will notify you of any changes by posting the new Privacy Policy on this page.</p>
-<p dir="ltr">This policy is effective as of <a href="tel:20600208">2060-02-08</a></p>
-<p dir="ltr">Contact Us</p>
-<p dir="ltr">If you have any questions or suggestions about my Privacy Policy, do not hesitate to contact me at <a href="mailto:transong@gmail.com">transong@gmail.com</a>.</p>
+  <head>
+    <title>Admin Panel</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="css/main.css">
 
-</body>
+<style>
+        .menu {
+            cursor: pointer;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            margin-top: 3px;
+            position: absolute;
+        }
+
+        .slideOutLeft {
+            animation-name: slideOut;
+            animation-duration: .5s;
+        }
+
+        @keyframes slideOut {
+            0% {
+                transform: translateX(0px);
+            }
+            100% {
+                transform: translateX(-200px);
+            }
+        }
+
+		.addCartBtn {
+            background: #f8fff6;
+            margin: 14px;
+        }
+
+</style>
+  </head>
+
+  <main id="main">
+
+    <div class="w3-sidebar w3-bar-block w3-animate-left w3-card-4 w3-hide" id="drawer">
+	  <div style="background-image: url('https://tran-song.github.io/php/Folder/akrales_180620_1777_0169.0.jpg'); background-size: cover;"
+		class="w3-green w3-padding-large">
+		<h5>TSong</h5>
+		<p>transongmm@gmail.com</p>
+	  </div>
+	  <a onclick="w3_close()" class="w3-bar-item w3-button">Home</a>
+	  <a onclick="w3_close()" class="w3-bar-item w3-button">About</a>
+	  <a onclick="w3_close()" class="w3-bar-item w3-button">Privacy Policy</a>
+    </div>
+
+    <header id="header" class="w3-card-4 w3-white">
+	  <div class="menu w3-display-container" onclick="w3_open()">
+		<div id="menuIcon" class="w3-display-middle w3-xlarge w3-animate-opacity">☰</div>
+	  </div>
+	  <h3 style="margin-left: 55px">TranSong</h3>
+
+	  
+    </header>
+
+    <div onclick="w3_close()" id="contents" class="content">
+	  <div class="w3-panel w3-container">
+
+		<?php $info_row = readInfo() ?>
+		<?php include('login/errors.php') ?>
+
+		<form class="w3-panel w3-container" method="post">
+		  <label for="edt_title">
+			<input id="edt_title" class="w3-input" type="text" name="title" placeholder="Title"
+			  value="<?php if ($info_row) echo $info_row['title'] ?>"/>
+		  </label>
+
+		  <label for="edt_message">
+			<input id="edt_message" class="w3-input w3-section" type="text" name="message"
+			  placeholder="Message"
+			  value="<?php if ($info_row) echo $info_row['message'] ?>"/>
+		  </label>
+
+		  <label for="show_info_switch">
+			<p>Show Info</p>
+			<select id="show_info_switch" class="w3-select" name="shouldShowInfo">
+			  <?php if ($info_row && $info_row['should_show_info']) { ?>
+			  <option value="1">On</option>
+			  <option value="0">Off</option>
+			  <?php } else { ?>
+			  <option value="0">Off</option>
+			  <option value="1">On</option>
+			  <?php } ?>
+			</select>
+		  </label>
+
+		  <label for="maintenance_switch">
+			<p>Maintenance Mode</p>
+			<select id="maintenance_switch" class="w3-select" name="maintenanceMode">
+			  <?php if ($info_row && $info_row['maintenance_mode']) { ?>
+			  <option value="1">On</option>
+			  <option value="0">Off</option>
+			  <?php } else { ?>
+			  <option value="0">Off</option>
+			  <option value="1">On</option>
+			  <?php } ?>
+			</select>
+		  </label>
+
+		  <div class="w3-center w3-margin-top">
+			<button class="w3-button w3-green w3-mobile w3-round-large" type="submit" name="save_info">
+			  Save
+			</button>
+		  </div>
+		</form>
+
+	  </div>
+    </div>
+
+	
+	<div id="contents" class="content">
+
+	  <div class="w3-row w3-animate-top">
+		<div class="w3-col l2 m4 s6">
+		  <div class="w3-card w3-round-xlarge w3-center w3-margin">
+			<img src="https://img.icons8.com/color/96/000000/orange.png" alt="fruit"/>
+			<div class="w3-border w3-button addCartBtn w3-margin w3-hover-light-gray w3-round-xxlarge">
+			  <span>Buy</span>
+			  <img src="https://img.icons8.com/material-outlined/24/000000/buy.png" alt="buy"/>
+			</div>
+		  </div>
+		</div>
+
+		<div class="w3-col l2 m4 s6">
+		  <div class="w3-card w3-round-xlarge w3-center w3-margin">
+			<img src="https://img.icons8.com/cotton/96/000000/plum--v1.png" alt="fruit"/>
+			<div class="w3-border w3-button addCartBtn w3-margin w3-hover-light-gray w3-round-xxlarge">
+			  <span>Buy</span>
+			  <img class="" src="https://img.icons8.com/material-outlined/24/000000/buy.png" alt="buy"/>
+			</div>
+		  </div>
+		</div>
+
+		<div class="w3-col l2 m4 s6">
+		  <div class="w3-card w3-round-xlarge w3-center w3-margin">
+			<img src="https://img.icons8.com/fluent/96/000000/cherry.png" alt="fruit"/>
+			<div class="w3-border w3-button addCartBtn w3-margin w3-hover-light-gray w3-round-xxlarge">
+			  <span>Buy</span>
+			  <img class="" src="https://img.icons8.com/material-outlined/24/000000/buy.png" alt="buy"/>
+			</div>
+		  </div>
+		</div>
+
+		<div class="w3-col l2 m4 s6">
+		  <div class="w3-card w3-round-xlarge w3-center w3-margin">
+			<img src="https://img.icons8.com/cotton/96/000000/watermelon--v2.png" alt="fruit"/>
+			<div class="w3-border w3-button addCartBtn w3-margin w3-hover-light-gray w3-round-xxlarge">
+			  <span>Buy</span>
+			  <img class="" src="https://img.icons8.com/material-outlined/24/000000/buy.png" alt="buy"/>
+			</div>
+		  </div>
+		</div>
+
+		<div class="w3-col l2 m4 s6">
+		  <div class="w3-card w3-round-xlarge w3-center w3-margin">
+			<img src="https://img.icons8.com/emoji/96/000000/red-apple.png" alt="fruit"/>
+			<div class="w3-border w3-button addCartBtn w3-margin w3-hover-light-gray w3-round-xxlarge">
+			  <span>Buy</span>
+			  <img class="" src="https://img.icons8.com/material-outlined/24/000000/buy.png" alt="buy"/>
+			</div>
+		  </div>
+		</div>
+
+		<div class="w3-col l2 m4 s6">
+		  <div class="w3-card w3-round-xlarge w3-center w3-margin">
+			<img src="https://img.icons8.com/color/96/000000/banana.png" alt="fruit"/>
+			<div class="w3-border w3-button addCartBtn w3-margin w3-hover-light-gray w3-round-xxlarge">
+			  <span>Buy</span>
+			  <img class="" src="https://img.icons8.com/material-outlined/24/000000/buy.png" alt="buy"/>
+			</div>
+		  </div>
+		</div>
+
+		<div class="w3-col l2 m4 s6">
+		  <div class="w3-card w3-round-xlarge w3-center w3-margin">
+			<img src="https://img.icons8.com/color/96/000000/banana.png" alt="fruit"/>
+			<div class="w3-border w3-button addCartBtn w3-margin w3-hover-light-gray w3-round-xxlarge">
+			  <span>Download</span>
+			  <img class="" src="https://img.icons8.com/material-outlined/24/000000/buy.png" alt="buy"/>
+			</div>
+		  </div>
+		</div>
+
+		<div class="w3-col l2 m4 s6">
+		  <div class="w3-card w3-round-xlarge w3-center w3-margin">
+			<img src="https://img.icons8.com/color/96/000000/banana.png" alt="fruit"/>
+			<div class="w3-border w3-button addCartBtn w3-margin w3-hover-light-gray w3-round-xxlarge">
+			  <span>Download</span>
+			  <img class="" src="https://img.icons8.com/material-outlined/24/000000/buy.png" alt="buy"/>
+			</div>
+		  </div>
+		</div>
+
+		<div class="w3-col l2 m4 s6">
+		  <div class="w3-card w3-round-xlarge w3-center w3-margin">
+			<img src="https://img.icons8.com/color/96/000000/banana.png" alt="fruit"/>
+			<a href="https://tran-song.github.io/php/policy.html"></a>
+			<div class="w3-border w3-button addCartBtn w3-margin w3-hover-light-gray w3-round-xxlarge">
+			  <a href="#about">Download</a>
+			  <img class="" src="https://img.icons8.com/material-outlined/24/000000/buy.png" alt="buy"/>
+			</div>
+		  </div>
+		</div>
+
+
+
+	  </div>
+
+    </div>
+
+  </main>
+
+  <script src="https://hammerjs.github.io/dist/hammer.js"></script>
+<script>
+
+    let drawer = document.getElementById("drawer");
+    let menuIcon = document.getElementById('menuIcon');
+
+    function w3_open() {
+        if (drawer.classList.contains("w3-hide")){
+            drawer.classList.remove("w3-hide");
+            menuIcon.innerText = "⬅";
+        } else w3_close();
+    }
+
+    function w3_close() {
+        menuIcon.innerText = "☰";
+        drawer.classList.remove("w3-animate-left");
+        drawer.classList.add("slideOutLeft");
+        setTimeout(function () {
+                drawer.classList.add("w3-hide");
+                drawer.classList.add("w3-animate-left");
+                drawer.classList.remove("slideOutLeft");
+            }, 400);
+    }
+
+    let hammer = new Hammer(drawer);
+    hammer.on("panleft", function () {
+        w3_close();
+    });
+
+
+</script>
 </html>
